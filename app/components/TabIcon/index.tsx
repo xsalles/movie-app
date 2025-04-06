@@ -1,7 +1,7 @@
 import { View, Text, ImageBackground, Image } from "react-native";
 import React from "react";
 import { images } from "@/constants/images";
-import { icons } from "@/constants/icons";
+
 
 export default function TabIcon({ focused, icon, title }: TabIconProps) {
   if (focused) {
