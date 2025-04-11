@@ -1,16 +1,22 @@
+const API_KEY = process.env.EXPO_PUBLIC_MOVIE_APP_API_KEY;
+
+if (!API_KEY) {
+  throw new Error("API key is not defined. Please set EXPO_PUBLIC_MOVIE_APP_API_KEY in your environment variables.");
+}
+
 export const TMDB_CONFIG = {
-  BASE_URL: "https://api.themoviedb.org/3",
+  BASE_URL: "https://api.themoviedb.org/3/",
   API_KEY: process.env.EXPO_MOVIE_APP_API_KEY,
   headers: {
     accept: "application/json",
-    Authorization: `Bearer ${process.env.EXPO_MOVIE_APP_API_KEY}`,
+    Authorization: `Bearer ${API_KEY}`,
   },
 };
 
 export const fetchMovies = async ({ query }: { query: string }) => {
   const endpoint = query
     ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-    : `${TMDB_CONFIG.BASE_URL}/discover/movie/sort_by=popularity.desc`;
+    : `${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc`;
 
   const response = await fetch(endpoint, {
     method: "GET",
