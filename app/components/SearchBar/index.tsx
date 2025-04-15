@@ -10,7 +10,7 @@ interface SearchBarProps {
 export default function SearchBar({ placeholder, onPress }: SearchBarProps) {
   return (
     <Pressable onPress={onPress}>
-      <View className="flex-row items-center bg rounded-full px-5 py-3 gap-3">
+      <View className="flex-row items-center bg-dark-200 rounded-full px-5 py-3 gap-3 mb-3">
         <Image
           source={icons.search}
           className="size-5"
