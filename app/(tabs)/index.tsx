@@ -25,7 +25,7 @@ export default function Home() {
     error: movieError,
   } = useFetch(() =>
     fetchMovies({
-      query: "spider man",
+      query: "",
     })
   );
 
