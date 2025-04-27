@@ -13,6 +13,7 @@ import CardMovie from "../components/CardMovie";
 import { images } from "@/constants/images";
 import { useFetch } from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
+import { updateSearchCount } from "@/services/appwrite";
 
 export default function Search() {
   const [search, setSearch] = useState("");
@@ -26,19 +27,23 @@ export default function Search() {
   } = useFetch(() =>
     fetchMovies({
       query: search,
-    })
+    }), false
   );
 
   useEffect(() => {
     const funcToCallMovies = setTimeout(async () => {
       if (search.trim()) {
         await loadMovies();
+
+        if (movie?.results.length! > 0 && movie?.results[0]) {
+          await updateSearchCount(search, movie.results[0]);
+        }
       } else {
         reset();
       }
     }, 500);
 
-    return clearTimeout(funcToCallMovies);
+    return () => clearTimeout(funcToCallMovies);
   }, [search]);
 
   const handleSearch = (text: string) => {
@@ -49,7 +54,7 @@ export default function Search() {
     <View className="flex-1 bg-primary w-full">
       <Image source={images.bg} className="flex-1 absolute w-full z-0" />
       <FlatList
-        data={movie?.results}
+        data={movie?.results as Movie[]}
         renderItem={({ item }) => <CardMovie {...item} />}
         keyExtractor={(item) => item.id.toString()}
         scrollEnabled={true}
@@ -79,7 +84,8 @@ export default function Search() {
                 onChangeText={handleSearch}
               />
               <Text className="text-xl text-white font-bold">
-                Search results for "{search}"
+                Search results for{" "}
+                <Text className="text-blue-500 font-bold">{search}</Text>
               </Text>
             </View>
 
@@ -94,13 +100,6 @@ export default function Search() {
             {movieError && (
               <Text className="text-red-500 px-5 my-3">
                 Error: {movieError?.message}
-              </Text>
-            )}
-
-            {!movieLoading && !movieError && movie?.length! > 0 && (
-              <Text className="text-xl text-white font-bold">
-                Search results for:{" "}
-                <Text className="text-blue-500">{search}</Text>
               </Text>
             )}
           </>
