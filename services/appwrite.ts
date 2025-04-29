@@ -1,9 +1,12 @@
 // track the searchs made by users
 import { Client, Databases, ID, Query } from "react-native-appwrite";
 
-if(!process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID || !process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID || !process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID) {
+if (
+  !process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID ||
+  !process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID ||
+  !process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID
+) {
   throw new Error("Appwrite environment variables are not set");
-
 }
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
@@ -35,9 +38,11 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
     } else {
       await databases.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
         searchTerm: query,
-        movie_id: movie.id,
         count: 1,
-        poster_url: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : null,
+        poster_url: movie.poster_path
+          ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+          : null,
+        movie_id: movie.id,
         title: movie.title,
       });
     }
@@ -48,3 +53,17 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
   // if yes, update the record incrementing the searchField
   // if not, create a new record
 };
+
+export const getTrandingMovies = async (): Promise<TrendingMovie[]> => {
+  try {
+    const result = await databases.listDocuments(DATABASE_ID, COLLECTION_ID, [
+      Query.limit(5),
+      Query.orderDesc("count"),
+    ]);
+
+    return result.documents as unknown as TrendingMovie[];
+  } catch (error) {
+    console.log("Error fetching trending movies:", error);
+    throw error;
+  }
+}

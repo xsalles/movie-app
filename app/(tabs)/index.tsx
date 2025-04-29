@@ -15,9 +15,16 @@ import { useRouter } from "expo-router";
 import { useFetch } from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
 import CardMovie from "../components/CardMovie";
+import { getTrandingMovies } from "@/services/appwrite";
 
 export default function Home() {
   const router = useRouter();
+
+  const {
+    data: trendingMovies,
+    loading: trendingLoading,
+    error: trendingError,
+  } = useFetch(getTrandingMovies);
 
   const {
     data: movie,
@@ -40,15 +47,15 @@ export default function Home() {
       >
         <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
 
-        {movieLoading ? (
+        {movieLoading || trendingLoading ? (
           <ActivityIndicator
             size="large"
             color="#0000ff"
             className="mt-10 self-center"
           />
-        ) : movieError ? (
+        ) : movieError || trendingError ? (
           <Text className="text-white text-center">
-            Error: {movieError?.message}
+            Error: {movieError?.message || trendingError?.message}
           </Text>
         ) : (
           <View>
@@ -56,7 +63,30 @@ export default function Home() {
               placeholder="Search for a movie"
               onPress={() => router.push("/Search")}
             />
-            <Text className="text-white font-bold mb-3">Latest Movies</Text>
+
+            {trendingMovies && (
+              <View className="mt-10 ">
+                <Text className="font-bold text-lg text-white mb-3">
+                  Trending Movies
+                </Text>
+                <FlatList
+                  data={trendingMovies}
+                  renderItem={({ item }) => (
+                    <Text className="text-white text-sm font-bold">
+                      {item.title}
+                    </Text>
+                  )}
+                  horizontal
+                  keyExtractor={(item) => item.movie_id.toString()}
+                  showsHorizontalScrollIndicator={false}
+                  className="gap-3"
+                />
+              </View>
+            )}
+
+            <Text className="text-white  text-lg font-bold mb-3">
+              Latest Movies
+            </Text>
             <FlatList
               data={movie?.results}
               renderItem={({ item }) => <CardMovie {...item} />}

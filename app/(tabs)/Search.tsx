@@ -13,7 +13,7 @@ import CardMovie from "../components/CardMovie";
 import { images } from "@/constants/images";
 import { useFetch } from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
-import { updateSearchCount } from "@/services/appwrite";
+import { getTrandingMovies, updateSearchCount } from "@/services/appwrite";
 
 export default function Search() {
   const [search, setSearch] = useState("");
@@ -24,20 +24,18 @@ export default function Search() {
     error: movieError,
     refetch: loadMovies,
     reset,
-  } = useFetch(() =>
-    fetchMovies({
-      query: search,
-    }), false
+  } = useFetch(
+    () =>
+      fetchMovies({
+        query: search,
+      }),
+    false
   );
 
   useEffect(() => {
     const funcToCallMovies = setTimeout(async () => {
       if (search.trim()) {
         await loadMovies();
-
-        if (movie?.results.length! > 0 && movie?.results[0]) {
-          await updateSearchCount(search, movie.results[0]);
-        }
       } else {
         reset();
       }
@@ -45,6 +43,12 @@ export default function Search() {
 
     return () => clearTimeout(funcToCallMovies);
   }, [search]);
+
+  useEffect(() => {
+    if (movie?.results.length! > 0 && movie?.results[0]) {
+      updateSearchCount(search, movie.results[0]);
+    }
+  }, [movie]);
 
   const handleSearch = (text: string) => {
     setSearch(text);
