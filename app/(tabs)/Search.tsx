@@ -13,7 +13,7 @@ import CardMovie from "../components/CardMovie";
 import { images } from "@/constants/images";
 import { useFetch } from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
-import { getTrandingMovies, updateSearchCount } from "@/services/appwrite";
+import { updateSearchCount } from "@/services/appwrite";
 
 export default function Search() {
   const [search, setSearch] = useState("");

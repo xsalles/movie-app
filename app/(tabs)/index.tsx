@@ -16,6 +16,7 @@ import { useFetch } from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
 import CardMovie from "../components/CardMovie";
 import { getTrandingMovies } from "@/services/appwrite";
+import TrendingCard from "../components/TrendingCard";
 
 export default function Home() {
   const router = useRouter();
@@ -71,15 +72,16 @@ export default function Home() {
                 </Text>
                 <FlatList
                   data={trendingMovies}
-                  renderItem={({ item }) => (
-                    <Text className="text-white text-sm font-bold">
-                      {item.title}
-                    </Text>
+                  renderItem={({ item, index }) => (
+                    <TrendingCard movie={item} index={index} />
                   )}
                   horizontal
                   keyExtractor={(item) => item.movie_id.toString()}
                   showsHorizontalScrollIndicator={false}
-                  className="gap-3"
+                  contentContainerStyle={{
+                    gap: 20,
+                  }}
+                  className="mb-4 mt-3"
                 />
               </View>
             )}
@@ -92,7 +94,7 @@ export default function Home() {
               renderItem={({ item }) => <CardMovie {...item} />}
               keyExtractor={(item) => item.id.toString()}
               scrollEnabled={false}
-              className="mt-2 pb-32 w-fullw"
+              className="mt-2 pb-32 w-full"
               numColumns={3}
               columnWrapperStyle={{
                 justifyContent: "flex-start",
