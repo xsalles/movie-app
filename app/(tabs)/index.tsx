@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   Text,
   FlatList,
-  Dimensions,
 } from "react-native";
 import React from "react";
 import { images } from "@/constants/images";
