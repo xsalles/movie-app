@@ -178,17 +178,6 @@ export default function MovieDetails() {
               </Text>
             </Pressable>
           )}
-
-          <Pressable
-            className="w-full py-2.5 px-5 bg-gradient-to-r from-light-100 to-light-200 rounded-[4px] mt-6"
-            onPress={() => {
-              router.back();
-            }}
-          >
-            <Text className="text-center text-secondary font-semibold">
-              Go Back
-            </Text>
-          </Pressable>
         </View>
       </ScrollView>
     </View>

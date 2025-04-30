@@ -36,17 +36,19 @@ export default function Home() {
     })
   );
 
+  console.log(movie);
+
   return (
     <View className="flex-1 bg-primary w-full">
       <Image source={images.bg} className="absolute w-full z-0" />
 
+      <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
+
       <ScrollView
         className="flex-1 px-5 z-10"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 10, minHeight: "100%" }}
+        contentContainerStyle={{ paddingBottom: 100, minHeight: "100%" }}
       >
-        <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
-
         {movieLoading || trendingLoading ? (
           <ActivityIndicator
             size="large"
@@ -58,32 +60,11 @@ export default function Home() {
             Error: {movieError?.message || trendingError?.message}
           </Text>
         ) : (
-          <View>
+          <View className="h-full w-full">
             <SearchBar
               placeholder="Search for a movie"
               onPress={() => router.push("/Search")}
             />
-
-            {trendingMovies && (
-              <View className="mt-10 ">
-                <Text className="font-bold text-lg text-white mb-3">
-                  Trending Movies
-                </Text>
-                <FlatList
-                  data={trendingMovies}
-                  renderItem={({ item, index }) => (
-                    <TrendingCard movie={item} index={index} />
-                  )}
-                  horizontal
-                  keyExtractor={(item) => item.movie_id.toString()}
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{
-                    gap: 20,
-                  }}
-                  className="mb-4 mt-3"
-                />
-              </View>
-            )}
 
             <Text className="text-white  text-lg font-bold mb-3">
               Latest Movies
