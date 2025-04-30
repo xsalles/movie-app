@@ -1,10 +1,12 @@
-import { View, Text } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import React from 'react'
+import { icons } from '@/constants/icons'
 
 export default function Profile() {
   return (
-    <View>
-      <Text>Profile</Text>
+    <View className='bg-primary flex-1 items-center justify-center'>
+      <Image source={icons.person} />
+      <Text className="text-light-200 font-bold text-xl mt-2">Profile</Text>
     </View>
   )
 }
